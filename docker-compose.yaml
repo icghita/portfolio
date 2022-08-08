@@ -1,0 +1,17 @@
+services:
+  server:
+    build: ./Server
+    container_name: fastapi_container
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./Server/app:/code/app
+  client:
+    build: ./Client
+    container_name: react_container
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./Client:/code/app
+      - /code/app/node_modules
+    stdin_open: true
