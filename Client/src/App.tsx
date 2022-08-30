@@ -1,106 +1,118 @@
-import React, { useState } from "react";
-import "./App.style"
-import CameraIcon from "@mui/icons-material/PhotoCamera";
-import { AppBar, Button, Card, CardActions, CardContent, CardMedia, CssBaseline, Grid, Stack, Box, Toolbar, Typography, Container, Link } from "@mui/material";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { Panel, SecondaryPanel } from "./components"
-import { background_image } from "./App.style"
+import { CssBaseline, Box } from "@mui/material"
+import { ThemeProvider } from "@mui/material/styles"
+import { BackgroundPanel, NavigationButtons, Footer } from "./components"
+import { global_theme } from "./styles"
+import { background_image } from "./assets"
+import { ApolloClient, InMemoryCache, ApolloProvider, NormalizedCacheObject, DocumentNode, ApolloQueryResult } from "@apollo/client"
+import { SERVER_URL, GET_TOKEN, NUM_TRIES, COOKIE_NAME } from "./config"
+import { Get_Items, Get_JWT } from "./graphQL/queries.graphql"
+import { useEffect, useState } from "react"
+import { useCookies } from "react-cookie"
 
-function Copyright() {
-    return (
-        <Typography variant="body2" color="text.secondary" align="center">
-            {"Copyright © "}
-            <Link color="inherit" href="https://mui.com/">
-                Your Website
-            </Link>{" "}
-            {new Date().getFullYear()}
-            {"."}
-        </Typography>
-    );
+
+async function Get_Query(client: ApolloClient<NormalizedCacheObject>, query: DocumentNode): Promise<ApolloQueryResult<any> | number> {
+    try {
+        const res = await client.query({ query: query })
+        return res
+    }
+    catch (error: any) {
+        if (typeof error.networkError?.response?.status !== "undefined")
+            return error.networkError?.response?.status
+        else
+            return 9999
+    }
 }
 
-const cards = [1, 2, 3, 4, 5, 6, 7, 8];
 
-const theme = createTheme();
+async function Initialize_Apollo(
+    cookies: { [COOKIE_NAME]?: string },
+    Set_Cookies: (name: any, value: any) => void,
+    Set_Apollo_Provider: React.Dispatch<React.SetStateAction<ApolloClient<any>>>
+) {
 
-export default function App() {
+    if (cookies && typeof cookies[COOKIE_NAME] === "string") {
+        const apollo_client: ApolloClient<any> = new ApolloClient({
+            uri: SERVER_URL,
+            cache: new InMemoryCache(),
+            headers: { "Authorization": "Bearer " + cookies[COOKIE_NAME] },
+        })
+        Get_Query(apollo_client, Get_Items)
+            .then((query_response) => {
+                if (typeof query_response === "number") {
+                    if (query_response === 401)
+                        Reconnect_Apollo(Set_Cookies, Set_Apollo_Provider)
+                } else {
+                    Set_Apollo_Provider(apollo_client)
+                }
+            })
+    } else
+        Reconnect_Apollo(Set_Cookies, Set_Apollo_Provider)
+}
+
+
+async function Reconnect_Apollo(
+    Set_Cookies: (name: any, value: any) => void,
+    Set_Apollo_Provider: React.Dispatch<React.SetStateAction<ApolloClient<any>>>
+) {
+
+    let i: number = 0
+
+    while (i < NUM_TRIES) {
+        i++
+        const jwt_apollo_client: ApolloClient<any> = new ApolloClient({
+            uri: SERVER_URL + GET_TOKEN,
+            cache: new InMemoryCache(),
+        })
+        Get_Query(jwt_apollo_client, Get_JWT)
+            .then((query_response) => {
+                if (typeof query_response !== "number") {
+                    const new_jwt = query_response?.data?.JWT[0].token
+                    Set_Cookies(COOKIE_NAME, new_jwt)
+
+                    const apollo_client: ApolloClient<any> = new ApolloClient({
+                        uri: SERVER_URL,
+                        cache: new InMemoryCache(),
+                        headers: { "Authorization": "Bearer " + new_jwt },
+                    })
+                    Set_Apollo_Provider(apollo_client)
+                    i = NUM_TRIES
+                }
+            })
+    }
+}
+
+
+const App = () => {
+
+    const [cookies, Set_Cookies] = useCookies([COOKIE_NAME])
+    const [apollo_client, Set_Apollo_Client] = useState<ApolloClient<any>>(new ApolloClient({ cache: new InMemoryCache() }))
+
+    useEffect(() => {
+        Initialize_Apollo(cookies, Set_Cookies, Set_Apollo_Client)
+    }, [])
+
     return (
-        <ThemeProvider theme={theme}>
-            <div style={background_image}>
-                <CssBaseline />
-                <AppBar position="relative">
-                    <Toolbar>
-                        <CameraIcon sx={{ mr: 2 }} />
-                        <Typography variant="h6" color="inherit" noWrap>
-                            Album layout
-                        </Typography>
-                    </Toolbar>
-                </AppBar>
-                {/* Hero unit */}
-                <Box
-                    sx={{
-                        bgcolor: "background.paper",
-                        pt: 8,
-                        pb: 6,
-                    }}
-                >
-                    <Container maxWidth="sm">
-                        <Typography
-                            component="h1"
-                            variant="h2"
-                            align="center"
-                            color="text.primary"
-                            gutterBottom
-                        >
-                            Album layout
-                        </Typography>
-                        <Typography variant="h5" align="center" color="text.secondary" paragraph>
-                            Something short and leading about the collection below—its contents,
-                            the creator, etc. Make it short and sweet, but not too short so folks
-                            don&apos;t simply skip over it entirely.
-                        </Typography>
-                        <Stack
-                            sx={{ pt: 4 }}
-                            direction="row"
-                            spacing={2}
-                            justifyContent="center"
-                        >
-                            <Button variant="contained">Main call to action</Button>
-                            <Button variant="outlined">Secondary action</Button>
-                        </Stack>
-                    </Container>
-                </Box>
-                <Container sx={{ py: 8 }} maxWidth="xl">
-                    {/* End hero unit */}
-                    <Panel>
-                        <Grid container spacing={4}>
-                            {cards.map((card) => (
-                                <Grid item key={card} xs={12} sm={6} md={6}>
-                                    <SecondaryPanel />
-                                </Grid>
-                            ))}
-                        </Grid>
-                    </Panel>
+        <ApolloProvider client={apollo_client}>
+            <CssBaseline>
+                <ThemeProvider theme={global_theme}>
+                    <Box sx={background}>
+                        <NavigationButtons />
+                        <BackgroundPanel />
+                        <Footer />
+                    </Box>
+                </ThemeProvider>
+            </CssBaseline >
+        </ApolloProvider>
+    )
+}
+export default App
 
-                </Container>
-
-                {/* Footer */}
-                <Box sx={{ bgcolor: "background.paper", p: 6 }} component="footer">
-                    <Typography variant="h6" align="center" gutterBottom>
-                        Footer
-                    </Typography>
-                    <Typography
-                        variant="subtitle1"
-                        align="center"
-                        color="text.secondary"
-                        component="p"
-                    >
-                        Something here to give the footer a purpose!
-                    </Typography>
-                    <Copyright />
-                </Box>
-                {/* End footer */}
-            </div>
-        </ThemeProvider>
-    );
+const background: object = {
+    backgroundImage: `url(${background_image})`,
+    padding: "0px",
+    width: "auto",
+    height: "auto",
+    minWidth: "100vw",
+    minHeight: "100vh",
+    position: "relative",
 }

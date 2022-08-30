@@ -1,8 +1,6 @@
 from sqlalchemy import create_engine
 from sqlalchemy.ext.asyncio import create_async_engine
-from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
-from sqlalchemy import MetaData
 from config import DATABASE_URL
 
 
@@ -15,7 +13,13 @@ engine = create_engine(
 
 LocalSession = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
-SqlAlchemyBase = declarative_base()
+
+def Get_Database():
+    db = LocalSession()
+    try:
+        yield db
+    finally:
+        db.close()
 
 
 """ engine = create_async_engine(
