@@ -1,7 +1,0 @@
-DATABASE_URL = "sqlite:///../db/db_sqlite.db"
-PRIVATE_KEY_PATH = "./private_key.pem"
-PUBLIC_KEY_PATH = "./public_key.pem"
-SERVER_URL = "http://127.0.0.1:8000"
-CLIENT_URL = "http://127.0.0.1:3000"
-SERVER_IMAGES_FOLDER = "../db/images/"
-PRIVATE_PASS = "3f43y0k"
