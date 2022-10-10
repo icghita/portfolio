@@ -2,12 +2,13 @@ import { CssBaseline, Box } from "@mui/material"
 import { ThemeProvider } from "@mui/material/styles"
 import { BackgroundPanel, NavigationButtons, Footer } from "./components"
 import { global_theme } from "./styles"
-import { background_image } from "./assets"
 import { ApolloClient, InMemoryCache, ApolloProvider, NormalizedCacheObject, DocumentNode, ApolloQueryResult } from "@apollo/client"
 import { SERVER_URL, GET_TOKEN, NUM_TRIES, COOKIE_NAME } from "./config"
 import { Get_Items, Get_JWT } from "./graphQL/queries.graphql"
 import { useEffect, useState } from "react"
 import { useCookies } from "react-cookie"
+import { BackgroundImage } from "react-image-and-background-image-fade"
+import { BLANK_BG } from "./config"
 
 
 async function Get_Query(client: ApolloClient<NormalizedCacheObject>, query: DocumentNode): Promise<ApolloQueryResult<any> | number> {
@@ -23,7 +24,6 @@ async function Get_Query(client: ApolloClient<NormalizedCacheObject>, query: Doc
     }
 }
 
-
 async function Initialize_Apollo(
     cookies: { [COOKIE_NAME]?: string },
     Set_Cookies: (name: any, value: any) => void,
@@ -34,7 +34,10 @@ async function Initialize_Apollo(
         const apollo_client: ApolloClient<any> = new ApolloClient({
             uri: SERVER_URL,
             cache: new InMemoryCache(),
-            headers: { "Authorization": "Bearer " + cookies[COOKIE_NAME] },
+            headers: {
+                "Authorization": "Bearer " + cookies[COOKIE_NAME],
+                "Access-Control-Allow-Origin": SERVER_URL,
+            },
         })
         Get_Query(apollo_client, Get_Items)
             .then((query_response) => {
@@ -49,14 +52,12 @@ async function Initialize_Apollo(
         Reconnect_Apollo(Set_Cookies, Set_Apollo_Provider)
 }
 
-
 async function Reconnect_Apollo(
     Set_Cookies: (name: any, value: any) => void,
     Set_Apollo_Provider: React.Dispatch<React.SetStateAction<ApolloClient<any>>>
 ) {
 
     let i: number = 0
-
     while (i < NUM_TRIES) {
         i++
         const jwt_apollo_client: ApolloClient<any> = new ApolloClient({
@@ -84,35 +85,39 @@ async function Reconnect_Apollo(
 
 const App = () => {
 
+    function Handle_Background_Image(bg: string) {
+        Set_Background_Image(`data:image/jpeg;base64,${bg}`)
+    }
+
     const [cookies, Set_Cookies] = useCookies([COOKIE_NAME])
     const [apollo_client, Set_Apollo_Client] = useState<ApolloClient<any>>(new ApolloClient({ cache: new InMemoryCache() }))
+    const [background_image, Set_Background_Image] = useState<string>("")
 
     useEffect(() => {
         Initialize_Apollo(cookies, Set_Cookies, Set_Apollo_Client)
     }, [])
 
+    const background_style = {
+        backgroundSize: "cover",
+        backgroundAttachment: "fixed",
+    }
+
     return (
         <ApolloProvider client={apollo_client}>
             <CssBaseline>
                 <ThemeProvider theme={global_theme}>
-                    <Box sx={background}>
+                    <BackgroundImage src={ background_image.length == 0 ? BLANK_BG : background_image}
+                        isResponsive
+                        transitionTime="2s"
+                        style={background_style} >
                         <NavigationButtons />
-                        <BackgroundPanel />
+                        <BackgroundPanel background_image={background_image}
+                            Set_Background_Image={Handle_Background_Image} />
                         <Footer />
-                    </Box>
+                    </BackgroundImage>
                 </ThemeProvider>
             </CssBaseline >
         </ApolloProvider>
     )
 }
 export default App
-
-const background: object = {
-    backgroundImage: `url(${background_image})`,
-    padding: "0px",
-    width: "auto",
-    height: "auto",
-    minWidth: "100vw",
-    minHeight: "100vh",
-    position: "relative",
-}

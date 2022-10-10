@@ -26,7 +26,7 @@ export const ExpandablePanel = ({ title, left_subtitle, left_column, item_id }:
 
     return (
         <ThemeProvider theme={global_theme} >
-            <Card key={title + item_id} 
+            <Card key={title + item_id}
                 sx={card_style}
                 {...animate_fade_in}
                 ref={view_ref}
@@ -36,15 +36,15 @@ export const ExpandablePanel = ({ title, left_subtitle, left_column, item_id }:
                     titleTypographyProps={card_title_style} />
                 <CardContent sx={{ ...boxes_container_style, ...centered_style }}>
                     <Box sx={left_box_style}>
-                        <Typography variant="h4" sx={{textAlign: "left"}}>
+                        <Typography variant="h4" sx={{ textAlign: "left" }}>
                             {left_subtitle}
                         </Typography>
-                        <Typography variant="body1" sx={{marginTop: "1em"}} >
+                        <Typography variant="body1" sx={{ marginTop: "1em" }} >
                             {left_column}
                         </Typography>
                     </Box>
                     <Box sx={right_box_style}>
-                        <Typography variant="h4" sx={{...centered_style, marginBottom: "1em"}}>
+                        <Typography variant="h4" sx={{ ...centered_style, marginBottom: "1em" }}>
                             {TECHNOLOGIES_SUBTITLES}
                         </Typography>
                         <IconList id={item_id} />
@@ -56,10 +56,11 @@ export const ExpandablePanel = ({ title, left_subtitle, left_column, item_id }:
                         close_direction={0}
                         open_direction={180} />
                 </CardActions>
-                <Collapse in={expanded} 
+                <Collapse in={expanded}
                     timeout="auto">
-                    <CardContent>
-                        <Contents id={item_id} opened={expanded} />
+                    <CardContent key={"card_cont_" + item_id}>
+                        <Contents id={item_id}
+                            opened={expanded} />
                     </CardContent>
                 </Collapse>
             </Card>

@@ -1,5 +1,3 @@
-import { from } from "@apollo/client";
-import { NormalPanel } from './NormalPanel';
 export { ExpandablePanel } from "./ExpandablePanel"
 export { BackgroundPanel } from "./BackgroundPanel"
 export { IconList } from "./IconList"
@@ -10,4 +8,5 @@ export { Footer } from "./Footer"
 export { NavigationButtons } from "./NavigationButtons"
 export { Loader } from "./Loader"
 export { TitleBox} from "./TitleBox"
-export { NormalPanel } from "./NormalPanel"
+export { SkillsPanel } from "./SkillsPanel"
+export { BrowsePopover } from "./BrowsePopover"

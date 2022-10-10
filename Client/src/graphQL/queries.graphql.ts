@@ -45,6 +45,16 @@ export const Get_Contents = gql`
     }
 `
 
+export const Get_Background = gql`
+    query Get_Background {
+        Background {
+            id
+            lrimage
+            hrimage
+        }
+    }
+`
+
 export const Get_JWT = gql`
     query Get_JWT {
         JWT {

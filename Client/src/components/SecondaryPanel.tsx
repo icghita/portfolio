@@ -1,28 +1,26 @@
-import * as React from 'react';
-import { styled } from '@mui/material/styles';
-import Card from '@mui/material/Card';
-import CardHeader from '@mui/material/CardHeader';
-import CardMedia from '@mui/material/CardMedia';
-import CardContent from '@mui/material/CardContent';
-import CardActions from '@mui/material/CardActions';
-import Collapse from '@mui/material/Collapse';
-import Avatar from '@mui/material/Avatar';
-import IconButton, { IconButtonProps } from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import { red } from '@mui/material/colors';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import ShareIcon from '@mui/icons-material/Share';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
+import * as React from "react"
+import { styled } from "@mui/material/styles"
+import Card from "@mui/material/Card"
+import CardHeader from "@mui/material/CardHeader"
+import CardMedia from "@mui/material/CardMedia"
+import CardContent from "@mui/material/CardContent"
+import CardActions from "@mui/material/CardActions"
+import Collapse from "@mui/material/Collapse"
+import Avatar from "@mui/material/Avatar"
+import IconButton, { IconButtonProps } from "@mui/material/IconButton"
+import Typography from "@mui/material/Typography"
+import { red } from "@mui/material/colors"
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore"
+import MoreVertIcon from "@mui/icons-material/MoreVert"
 
 
 export const SecondaryPanel = () => 
 {
-    const [expanded, Set_Expanded] = React.useState(false);
+    const [expanded, Set_Expanded] = React.useState(false)
 
     const Handle_Expand_Click = () => {
-        Set_Expanded(!expanded);
-    };
+        Set_Expanded(!expanded)
+    }
 
     return (
         <Card sx={{ maxWidth: 345 }}>
@@ -77,7 +75,7 @@ export const SecondaryPanel = () =>
                         large plate and set aside, leaving chicken and chorizo in the pan. Add
                         pimentón, bay leaves, garlic, tomatoes, onion, salt and pepper, and cook,
                         stirring often until thickened and fragrant, about 10 minutes. Add
-                        saffron broth and remaining 4 1/2 cups chicken broth; bring to a boil.
+                        saffron broth and remaining 4 1/2 cups chicken broth bring to a boil.
                     </Typography>
                     <Typography paragraph>
                         Add rice and stir very gently to distribute. Top with artichokes and
@@ -85,7 +83,7 @@ export const SecondaryPanel = () =>
                         15 to 18 minutes. Reduce heat to medium-low, add reserved shrimp and
                         mussels, tucking them down into the rice, and cook again without
                         stirring, until mussels have opened and rice is just tender, 5 to 7
-                        minutes more. (Discard any mussels that don&apos;t open.)
+                        minutes more. (Discard any mussels that don&apost open.)
                     </Typography>
                     <Typography>
                         Set aside off of the heat to let rest for 10 minutes, and then serve.
@@ -93,28 +91,28 @@ export const SecondaryPanel = () =>
                 </CardContent>
             </Collapse>
         </Card>
-    );
+    )
 }
 
 interface ExpandMoreProps extends IconButtonProps 
 {
-    expand: boolean;
+    expand: boolean
 }
 
 const ExpandMore = styled((props: ExpandMoreProps) => 
 {
-    const { expand, ...other } = props;
-    return <IconButton {...other} />;
+    const { expand, ...other } = props
+    return <IconButton {...other} />
 })(
     ({ theme, expand }) =>
     ({
-        transform: !expand ? 'rotate(0deg)' : 'rotate(180deg)',
-        transition: theme.transitions.create('transform',
+        transform: !expand ? "rotate(0deg)" : "rotate(180deg)",
+        transition: theme.transitions.create("transform",
             {
                 duration: theme.transitions.duration.shortest,
             }),
     })
-);
+)
 
 const expand_style = {
     margin: "auto",

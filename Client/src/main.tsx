@@ -34,6 +34,12 @@ export interface ImageContent {
     cols: number
 }
 
+export interface Background {
+    id: string
+    lrimage: string
+    hrimage: string
+}
+
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
     <React.StrictMode>

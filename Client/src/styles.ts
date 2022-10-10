@@ -131,7 +131,7 @@ export const animate_fade_in = {
         visible: { opacity: 1, scale: 1, borderRadius: "25px" },
     },
     initial: "hidden",
-    transition: { duration: 0.8 },
+    transition: { duration: 1.5 },
 }
 
 export const animate_text_right = {
@@ -177,4 +177,15 @@ export const animate_staggered_child = {
     },
     transition: { duration: 0.8 },
     initial: "closed",
+}
+
+export const button_style = {
+    background: global_theme.palette.primary.main,
+    color: global_theme.palette.secondary.light,
+    width: "6em",
+    borderRadius: "25px",
+    margin: "0.5em 0 0.5em 0",
+    "&:hover": {
+        background: global_theme.palette.primary.dark,
+    }
 }

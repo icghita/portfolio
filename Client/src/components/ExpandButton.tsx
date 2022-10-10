@@ -16,11 +16,9 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
 
     return <IconButton {...other} />
 })(
-    ({ theme, expand, close_direction, open_direction }) =>
-    ({
+    ({ theme, expand, close_direction, open_direction }) => ({
         transform: !expand ? `rotate(${close_direction}deg)` : `rotate(${open_direction}deg)`,
-        transition: theme.transitions.create("transform",
-            {
+        transition: theme.transitions.create("transform", {
                 duration: theme.transitions.duration.shortest,
             }),
     })
@@ -30,8 +28,7 @@ export const ExpandButton = ({expand, Click_Handler, close_direction, open_direc
     {expand: boolean, Click_Handler: () => void, close_direction: number, open_direction: number }) => {
 
     return (
-        <ExpandMore
-            onClick={Click_Handler}
+        <ExpandMore onClick={Click_Handler}
             expand={expand}
             close_direction={close_direction}
             open_direction={open_direction}

@@ -5,7 +5,8 @@ import { useAnimation } from "framer-motion"
 import { useInView } from "react-intersection-observer"
 import { useEffect } from "react"
 
-export const TitleBox = ({ id, text, main_title }: { id: string, text: string, main_title?: boolean | undefined }) => {
+export const TitleBox = ({ id, text, main_title }: 
+    { id: string, text: string, main_title?: boolean | undefined }) => {
 
     const animation_controls = useAnimation()
     const [view_ref, in_view] = useInView()
@@ -35,7 +36,7 @@ export const TitleBox = ({ id, text, main_title }: { id: string, text: string, m
                     key={SECTION_ID_PREFIX + id}
                     variant="h3" >
                     <pre>
-                        Hello! I am
+                        &#128075; Hello! I am
                         <Typography
                             id={SECTION_ID_PREFIX + id}
                             key={SECTION_ID_PREFIX + id}

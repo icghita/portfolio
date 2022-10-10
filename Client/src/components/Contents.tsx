@@ -1,5 +1,5 @@
-import { Box, Container, Typography, ImageList, ImageListItem, Link, ImageListItemBar, createTheme } from "@mui/material"
-import LinkIcon from '@mui/icons-material/Link';
+import { Box, Container, Typography, ImageList, ImageListItem, Link, ImageListItemBar } from "@mui/material"
+import LinkIcon from "@mui/icons-material/Link"
 import { useQuery } from "@apollo/client"
 import { Get_Contents, Get_Images } from "../graphQL/queries.graphql"
 import { Content, ImageContent } from "../main"
@@ -26,59 +26,59 @@ export const Contents = ({ id, opened }: { id: string, opened: boolean }) => {
     }, [opened])
 
     return (
-        <Container sx={{ ...boxes_container_style, ...centered_style }}>
+        <Container sx={{ ...boxes_container_style, ...centered_style }} key={"content_cont_" + id}>
             {typeof loading_contents != "undefined" && loading_contents === false &&
                 <Box key={"left_box_" + id}
                     sx={left_box_style}
                     {...animate_text_left}
                     animate={animation_controls} >
                     {data_contents.Contents.map((c: Content) => (
-                        <Box key={id + c.id}>
-                            <Typography variant="h4">{c.title}</Typography>
-                            <Typography variant="body1" sx={{marginTop:"1em", marginRight:"1em"}}>{c.text}</Typography>
+                        <Box key={id + c.id + String(Math.random())}>
+                            <Typography variant="h4" key={String(Math.random())}>{c.title}</Typography>
+                            <Typography variant="body1" 
+                                sx={{marginTop:"1em", marginRight:"1em"}} 
+                                key={String(Math.random())}>{c.text}</Typography>
                             {c.links && c.links.split(",").map((l) => (
                                 l.startsWith("http")
-                                    ? <Typography variant="h5">
-                                        <Link href={l} target="_blank" rel="noopener noreferrer" sx={link_style}>{l}<LinkIcon /></Link>
+                                    ? <Typography variant="h5" key={String(Math.random())}>
+                                        <Link href={l} target="_blank" rel="noopener noreferrer" sx={link_style} key={String(Math.random())}>{l}<LinkIcon /></Link>
                                     </Typography>
-                                    : <Typography variant="body1">{l}</Typography>
+                                    : <Typography variant="body1" key={String(Math.random())}>{l}</Typography>
                             ))}
                         </Box>
                     ))}
-                </Box>
-            }
+                </Box>}
             {typeof loading_images != "undefined" && loading_images === false &&
-                <Box sx={{ ...right_box_style }} >
+                <Box key={"right_box_" + id}
+                    sx={{ ...right_box_style }} >
                     {data_images &&
-                        <ImageList
+                        <ImageList key={"img_lst" + id + String(Math.random())}
                             variant="quilted"
                             cols={2}
                             rowHeight="auto"
                             {...animate_staggered}
                             animate={animation_controls} >
                             {data_images.Images.map((im: ImageContent, index: number) => (
-                                <ImageListItem key={id + im.id + index}
+                                <ImageListItem key={"content_" + id + im.id + index + String(Math.random())}
                                     cols={im.cols || 1}
                                     rows={im.rows || 1}
                                     sx={hover_image_style}
                                     {...animate_staggered_child}
                                     animate={animation_controls}
                                     onClick={() => Handle_Open_Image(`data:image/png;base64,${im.encoded}`)} >
-                                    <img src={`data:image/png;base64,${im.encoded}`}
+                                    <img key={"img_" + id + im.id + index + String(Math.random())}
+                                        src={`data:image/png;base64,${im.encoded}`}
                                         alt={im.id}
                                         loading="lazy"
                                         width="inherited" height="inherited" />
-                                    <ImageListItemBar
+                                    <ImageListItemBar key={"bar_" + id + im.id + index + String(Math.random())}
                                         title={im.description}
                                         className="ItemBar" />
                                 </ImageListItem>
                             ))}
-                        </ImageList>
-                    }
-                </Box>
-            }
-        </Container >
-    )
+                        </ImageList>}
+                </Box>}
+        </Container >)
 }
 
 const centered_style = {

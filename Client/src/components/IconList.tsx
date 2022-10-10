@@ -1,18 +1,46 @@
 import { Box, Container, Grid, Typography } from "@mui/material"
-import { CLIENT_URL, CLIENT_ASSETS_FOLDER } from "../config"
+import { CLIENT_ASSETS_FOLDER } from "../config"
 import { useQuery } from "@apollo/client"
 import { Get_Technologies } from "../graphQL/queries.graphql"
 import { Technology } from "../main"
+import { useEffect, useState } from "react"
 
-export const IconList = ({ id }: { id: string }) => {
+export const IconList = ({ id, search_str }: { id: string, search_str: string }) => {
 
     const { loading: loading_technologies, error: error_technologies, data: data_technologies } = useQuery(Get_Technologies, { variables: { item_id: id } })
+    const [displayed_technologies, Set_Displayed_Technologies] = useState<Technology[]>([])
+
+    useEffect(() => {
+        if (typeof loading_technologies !== "undefined" 
+                && !loading_technologies 
+                && typeof data_technologies !== "undefined") {
+            Set_Displayed_Technologies(data_technologies.Technologies)
+        }
+    }, [data_technologies])
+
+    useEffect(() => {
+        if (typeof search_str != "undefined" 
+                && typeof loading_technologies !== "undefined" 
+                && !loading_technologies 
+                && typeof data_technologies !== "undefined") {
+            let split_search = search_str.trim().split(/\s+/)
+            let filtered_technologies: Technology[]
+            filtered_technologies = data_technologies.Technologies.filter((t: Technology) => {
+                for (let s of split_search) {
+                    if (t.title.toLowerCase().includes(s.toLowerCase()))
+                        return true
+                }
+                return false
+            })
+            Set_Displayed_Technologies(filtered_technologies)
+        }
+    }, [search_str])
 
     return (
         <Container sx={container_style}>
             {typeof loading_technologies != "undefined" && loading_technologies === false &&
                 <Grid container spacing={5} justifyContent="center">
-                    {data_technologies.Technologies
+                    {displayed_technologies
                         .slice().sort((x: Technology, y: Technology) => { return parseInt(x.id) - parseInt(y.id) })
                         .map((t: Technology, index: number) => (
                             <Grid item xs="auto"
@@ -20,7 +48,7 @@ export const IconList = ({ id }: { id: string }) => {
                                 key={id + t.title + index} >
                                 <Box sx={stack_vertically}>
                                     {t.url && <Box component="img" sx={icon_style}
-                                        src={CLIENT_URL + CLIENT_ASSETS_FOLDER + t.url} />}
+                                        src={CLIENT_ASSETS_FOLDER + t.url} />}
                                     <Typography variant="h3">{t.title}</Typography>
                                 </Box>
                             </Grid>
@@ -33,7 +61,7 @@ export const IconList = ({ id }: { id: string }) => {
 
 const container_style = {
     textAlign: "center",
-    padding: "5em",
+    padding: "2em",
 }
 
 const grid_item_style = {

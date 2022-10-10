@@ -8,9 +8,7 @@ import { global_theme, dimensions_theme } from "../styles"
 import { useEffect, useRef, useState } from "react"
 
 
-
 export const NavigationButtons = () => {
-
 
     function Handle_Click_Menu(event: React.MouseEvent<HTMLElement>) {
         Set_Anchor_Element(event.currentTarget)
@@ -85,8 +83,7 @@ export const NavigationButtons = () => {
                         onClick={Handle_Click_Menu} >
                         <MenuIcon sx={menu_button_style} />
                     </IconButton>
-                    <Menu
-                        id="long-menu"
+                    <Menu id="long-menu"
                         MenuListProps={{ "aria-labelledby": "long-button" }}
                         anchorEl={anchor_element}
                         open={open_menu}
