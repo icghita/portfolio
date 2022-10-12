@@ -1,5 +1,4 @@
 import graphene
-import uuid
 from pathlib import Path
 from typing import List, Any, Union
 
@@ -9,12 +8,8 @@ from models.images import Image, ImagesTable
 from models.technologies import Technology, TechnologiesTable
 from models.contents import Content, ContentsTable
 from config import SERVER_IMAGES_FOLDER
-from utils.encoding import Encode_Image
+from utils.encoding import Encode_Image, Generate_UUID
 from utils.generate_images import Sample_Image, BackgroundObject
-
-
-def Generate_UUID():
-    return str(uuid.uuid64())
 
 
 class Query(graphene.ObjectType):
@@ -55,6 +50,7 @@ class Query(graphene.ObjectType):
 
     Background = graphene.Field(
         BackgroundObject,
+        id=graphene.String(),
         lrimage=graphene.String(),
         hrimage=graphene.String()
     )
@@ -62,6 +58,7 @@ class Query(graphene.ObjectType):
     def resolve_Background(self, info):
         (lrimage, hrimage) = Sample_Image()
         return BackgroundObject(
+            id=Generate_UUID(),
             lrimage=lrimage,
             hrimage=hrimage,
         )

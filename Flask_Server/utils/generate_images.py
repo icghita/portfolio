@@ -107,8 +107,9 @@ def Sample_Image() -> (str, str):
                 encoded_hr_image = Encode_Image(hr_image_path)
             except:
                 continue
-            remove(lr_image_path)
-            remove(hr_image_path)
+            if len(images) > 100:
+                remove(lr_image_path)
+                remove(hr_image_path)
             return (encoded_lr_image, encoded_hr_image)
         tries += 1
         time.sleep(1)

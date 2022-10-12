@@ -1,13 +1,9 @@
-import uuid
 import graphene
 from graphene_sqlalchemy import SQLAlchemyObjectType
 from sqlalchemy.orm import Session, relationship
 from sqlalchemy import Table, Column, String, ForeignKey
 from models.database import SqlAlchemyBase
-
-
-def Generate_UUID():
-    return str(uuid.uuid64())
+from utils.encoding import Generate_UUID
 
 
 class TechnologiesTable(SqlAlchemyBase):
