@@ -1,7 +1,6 @@
 import time
 import PIL
 import strawberry
-import uuid
 import psutil
 from multiprocessing import Process
 from os import listdir, makedirs, path, remove
@@ -20,7 +19,7 @@ from config import (DIFFUSION_MODEL_PATH,
                     GENERATED_OUTPUT,
                     IMG_EXTENSION,
                     UPSCALE_MODEL_PATH)
-from utils.encoding import Encode_Image
+from utils.encoding import Encode_Image, Generate_UUID
 
 
 @strawberry.type
@@ -30,7 +29,7 @@ class Background:
     hrimage: str | None
 
     def __init__(self, lr_image: str | None, hr_image: str | None):
-        self.id = str(uuid.uuid4())
+        self.id = Generate_UUID()
         self.lrimage = lr_image
         self.hrimage = hr_image
 
