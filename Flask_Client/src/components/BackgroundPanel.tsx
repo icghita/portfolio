@@ -22,7 +22,7 @@ export const BackgroundPanel = ({ background_image, Set_Background_Image }:
                         <ImageControls background_image={background_image}
                             Set_Background_Image={Set_Background_Image} />
                     </Box>
-                    {typeof loading_items != "undefined" && loading_items === false && data_items != "undefined" &&
+                    {typeof loading_items != "undefined" && loading_items === false && typeof data_items != "undefined" &&
                         <Box>
                             {data_items.Items
                                 .slice().sort((x: Item, y: Item) => { return parseInt(x.id) - parseInt(y.id) })

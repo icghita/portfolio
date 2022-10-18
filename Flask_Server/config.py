@@ -2,8 +2,6 @@ DATABASE_URI = "sqlite:///db/portfolio_sqlite.db"
 PRIVATE_KEY_PATH = "./private_key.pem"
 PUBLIC_KEY_PATH = "./public_key.pem"
 
-#SERVER_URL = "server:8000"
-#CLIENT_URL = "client:3000"
 SERVER_URL = "http://127.0.0.1:8000"
 CLIENT_URI = "http://127.0.0.1:3000"
 

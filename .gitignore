@@ -8,3 +8,6 @@ portfolio_sqlite.db
 images/
 dist
 assets/
+generated/
+diffusion_checkpoints_100
+upscale_model_54

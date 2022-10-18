@@ -16,8 +16,24 @@ export const ImageControls = ({ background_image, Set_Background_Image }:
 
     async function Handle_New_BG(Get_New_BG: any) {
         Set_Getting_New(true)
-        const { loading: loading_local, error: error_local, data: data_local } = await Get_New_BG()
+        let { loading: loading_local, error: error_local, data: data_local } = await Get_New_BG()
         if (typeof loading_local != "undefined" && loading_local === false) {
+            let ok = false
+            let tries = 0
+            while (!ok && tries < 100) {
+                for (let i = 0; i < bg_images.length; i++) {
+                    tries++
+                    if (data_local.Background.lrimage === bg_images[i].lrimage) {
+                        await Delay(100)
+                        let { loading: loading_aux, error: error_aux, data: data_aux } = await Get_New_BG()
+                        loading_local = loading_aux
+                        error_local = loading_aux
+                        data_local = data_aux
+                        break
+                    }
+                    ok = true
+                }
+            }
             let aux_images = bg_images
             let aux_hash_map = new Map()
             aux_images.push(data_local.Background)
@@ -34,6 +50,10 @@ export const ImageControls = ({ background_image, Set_Background_Image }:
         }
         Set_Getting_New(false)
     }
+
+    function Delay(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+      }
 
     function Handle_Expand_Click() {
         Set_Expanded(!expanded)

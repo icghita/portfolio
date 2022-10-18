@@ -1,4 +1,4 @@
-export const SERVER_URL = "https://portfolio.selmes-metalochimice.ro/"
+export const SERVER_URL = "http://127.0.0.1:8000"
 export const GET_TOKEN = "/jwt"
 export const CLIENT_ASSETS_FOLDER = "assets/"
 export const BLANK_BG = "assets/blank_bg.png"
