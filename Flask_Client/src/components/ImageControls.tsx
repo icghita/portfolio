@@ -23,7 +23,7 @@ export const ImageControls = ({ background_image, Set_Background_Image }:
             while (!ok && tries < 100) {
                 for (let i = 0; i < bg_images.length; i++) {
                     tries++
-                    if (data_local.Background.lrimage === bg_images[i].lrimage) {
+                    if (data_local.Background.id === bg_images[i].id) {
                         await Delay(100)
                         let { loading: loading_aux, error: error_aux, data: data_aux } = await Get_New_BG()
                         loading_local = loading_aux
@@ -31,8 +31,8 @@ export const ImageControls = ({ background_image, Set_Background_Image }:
                         data_local = data_aux
                         break
                     }
-                    ok = true
                 }
+                ok = true
             }
             let aux_images = bg_images
             let aux_hash_map = new Map()
@@ -132,7 +132,7 @@ export const ImageControls = ({ background_image, Set_Background_Image }:
                         <CardHeader
                             title="Image Controls"
                             titleTypographyProps={card_title_style} />
-                        <Container sx={{ ...boxes_container_style, padding: "2em 2em 4em 2em" }}>
+                        <Container sx={{ ...boxes_container_style, padding: "0 2em 4em 2em" }}>
                             <Grid container sx={{ height: "10em", width: "10em", marginBottom: "4em" }}>
                                 <Grid item xs={12}>
                                     <Button sx={button_style}

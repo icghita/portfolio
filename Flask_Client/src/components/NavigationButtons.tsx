@@ -45,7 +45,7 @@ export const NavigationButtons = () => {
             const footer: Item = { id: FOOTER_ID, itemId: FOOTER_ID, description: "Contact", title: "", subtitle: "" }
             aux.unshift(img_ctrl)
             aux.unshift(footer)
-            aux.sort((x: Item, y: Item) => { return parseInt(x.id) - parseInt(y.id) })
+            aux.sort((x: Item, y: Item) => { return parseInt(x.itemId) - parseInt(y.itemId) })
 
             sections.current = aux.slice()
             active_sections.current = Array.from({ length: sections.current.length }, () => false)
@@ -58,11 +58,11 @@ export const NavigationButtons = () => {
             {typeof loading_items != "undefined" && loading_items === false && (large_screen || medium_screen) &&
                 <Grid container spacing={2}>
                     {sections.current.map((item: Item) => (
-                        <Grid item key={NAVIGATION_BUTTON_PREFIX + item.id} xs={12}>
+                        <Grid item key={NAVIGATION_BUTTON_PREFIX + item.itemId} xs={12}>
                             <Button sx={button_style}
                                 size={medium_screen ? "small" : "large"}
-                                id={NAVIGATION_BUTTON_PREFIX + item.id}
-                                onClick={() => { Handle_Scroll_To(SECTION_ID_PREFIX + item.id) }}>
+                                id={NAVIGATION_BUTTON_PREFIX + item.itemId}
+                                onClick={() => { Handle_Scroll_To(SECTION_ID_PREFIX + item.itemId) }}>
                                 <Typography variant="subtitle1"
                                     sx={button_text_style}>
                                     {item.description}
@@ -91,8 +91,8 @@ export const NavigationButtons = () => {
                         PaperProps={expandable_menu_style} >
                         {sections.current.map((item: Item) => (
                             <MenuItem sx={menu_item_style}
-                                key={NAVIGATION_BUTTON_PREFIX + "collapse_" + item.id}
-                                onClick={() => { Handle_Scroll_To(SECTION_ID_PREFIX + item.id) }}>
+                                key={NAVIGATION_BUTTON_PREFIX + "collapse_" + item.itemId}
+                                onClick={() => { Handle_Scroll_To(SECTION_ID_PREFIX + item.itemId) }}>
                                 {item.description}
                             </MenuItem>
                         ))}
@@ -151,8 +151,9 @@ const menu_button_style = {
 }
 
 const expandable_menu_style = {
+    overflow: "visible !important",
     style: {
-        maxHeight: 40 * 4.5,
+        overflow: "visible !important",
         width: "20ch",
         background: global_theme.palette.primary.main,
     },

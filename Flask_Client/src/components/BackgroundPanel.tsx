@@ -3,7 +3,7 @@ import { ExpandablePanel, ImageControls, Loader, TitleBox, SkillsPanel } from ".
 import { useQuery } from "@apollo/client"
 import { Get_Items } from "../graphQL/queries.graphql"
 import { Item } from "../main"
-import { SECTION_SEPARATOR, NORMAL_PANEL, SKILLS_PANEL } from "../config"
+import { SECTION_SEPARATOR, NORMAL_PANEL, SKILLS_PANEL, SECTION_ID_PREFIX } from "../config"
 import { dimensions_theme } from "../styles"
 
 export const BackgroundPanel = ({ background_image, Set_Background_Image }: 
@@ -25,11 +25,11 @@ export const BackgroundPanel = ({ background_image, Set_Background_Image }:
                     {typeof loading_items != "undefined" && loading_items === false && typeof data_items != "undefined" &&
                         <Box>
                             {data_items.Items
-                                .slice().sort((x: Item, y: Item) => { return parseInt(x.id) - parseInt(y.id) })
+                                .slice().sort((x: Item, y: Item) => { return parseInt(x.itemId) - parseInt(y.itemId) })
                                 .map((item: Item) => {
                                     if (item.title === SECTION_SEPARATOR)
                                         return (
-                                            <TitleBox key={"title_" + item.itemId}
+                                            <TitleBox key={SECTION_ID_PREFIX + item.itemId}
                                                 id={item.itemId}
                                                 text={item.description} />
                                         )
@@ -79,7 +79,16 @@ const flex_style = {
 
 
 const container_style = {
-    padding: "2em 0 8em 0",
+    paddingTop: "2em",
+    [dimensions_theme.breakpoints.up("lg")]: {
+        paddingBottom: "20em",
+    },
+    [dimensions_theme.breakpoints.between("sm", "lg")]: {
+        paddingBottom: "40em",
+    },
+    [dimensions_theme.breakpoints.down("sm")]: {
+        paddingBottom: "60em",
+    }
 }
 
 const transparent_panel = {
