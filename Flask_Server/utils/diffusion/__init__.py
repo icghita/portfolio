@@ -23,6 +23,10 @@ if gpus:
 # CUDA path
 cuda_path = "/opt/cuda"
 os.environ['XLA_FLAGS'] = "--xla_gpu_cuda_data_dir=" + cuda_path """
+
+tf.config.threading.set_intra_op_parallelism_threads(1)
+tf.config.threading.set_inter_op_parallelism_threads(1)
+
 # data
 train_dataset_path = "nebulae_data/train"
 val_dataset_path = "nebulae_data/validation"
