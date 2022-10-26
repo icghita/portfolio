@@ -21,16 +21,3 @@ def Get_Database():
     finally:
         db.close()
 
-
-""" engine = create_async_engine(
-    DATABASE_URL,
-    echo=True,
-) """
-
-
-""" async def Database_Connect():
-    await database.connect()
-
-async def Database_Disconnect():
-    await database.disconnect()
- """
