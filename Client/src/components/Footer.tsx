@@ -3,7 +3,7 @@ import EmailIcon from "@mui/icons-material/Email"
 import LinkedInIcon from "@mui/icons-material/LinkedIn"
 import GitHubIcon from "@mui/icons-material/GitHub"
 import { IconList } from "./"
-import { global_theme } from "../styles"
+import { boxes_container_style, global_theme, left_box_style, right_box_style } from "../styles"
 import { FOOTER_ID, SECTION_ID_PREFIX } from "../config"
 
 const Copyright = () => {
@@ -18,9 +18,9 @@ const Copyright = () => {
 export const Footer = () => {
     return (
         <Box id={SECTION_ID_PREFIX + FOOTER_ID}
-            sx={footer_style}
+            sx={{...boxes_container_style, ...footer_style}}
             component="footer">
-            <Box sx={{ width: "50%" }}>
+            <Box sx={{...left_box_style, width: "50%" }}>
                 <Typography variant="h3" align="center" sx={{ margin: "0.5em" }}>
                     Contact Me
                 </Typography>
@@ -41,7 +41,7 @@ export const Footer = () => {
                 </Typography>
                 <Copyright />
             </Box>
-            <Box sx={{ width: "50%", display: "flex", flexDirection: "row" }}>
+            <Box sx={{...right_box_style, width: "50%", display: "flex", flexDirection: "row" }}>
                 <Typography variant="h3" align="center" sx={{my: "auto"}}>
                     Website powered by:
                 </Typography>

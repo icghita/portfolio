@@ -80,7 +80,16 @@ const flex_style = {
 
 
 const container_style = {
-    padding: "2em 0 8em 0",
+    paddingTop: "2em",
+    [dimensions_theme.breakpoints.up("lg")]: {
+        paddingBottom: "20em",
+    },
+    [dimensions_theme.breakpoints.between("sm", "lg")]: {
+        paddingBottom: "40em",
+    },
+    [dimensions_theme.breakpoints.down("sm")]: {
+        paddingBottom: "60em",
+    }
 }
 
 const transparent_panel = {

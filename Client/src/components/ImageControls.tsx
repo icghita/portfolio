@@ -163,7 +163,7 @@ export const ImageControls = ({ background_image, Set_Background_Image }:
                                     <br/>
                                     Use the "New" button to generate a new image, browse through the generated ones to change the wallpaper and open the current wallpaper in a new tab to save it!
                                     <br/>
-                                    Source code and trained models can be founded at <Link href={diffusion_repository} target="_blank" rel="noopener noreferrer" sx={link_style}>{diffusion_repository}<LinkIcon /></Link>
+                                    Source code and trained models can be found at <Link href={diffusion_repository} target="_blank" rel="noopener noreferrer" sx={link_style}>{diffusion_repository}<LinkIcon /></Link>
                                 </Typography>
                             </Box>
                         </Container>
