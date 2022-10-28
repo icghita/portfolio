@@ -18,7 +18,8 @@ from utils.diffusion.processing import Upscale_Image
 from config import (DIFFUSION_MODEL_PATH,
                     GENERATED_OUTPUT,
                     IMG_EXTENSION,
-                    UPSCALE_MODEL_PATH)
+                    UPSCALE_MODEL_PATH,
+                    PID_PATH)
 from utils.encoding import Encode_Image, Generate_UUID
 
 
@@ -66,23 +67,24 @@ def Run_Models():
             upscale_model, GENERATED_OUTPUT + str(aux_index) + "_lr" + IMG_EXTENSION)
         hr_image.save(GENERATED_OUTPUT + str(aux_index) +
                       "_hr" + IMG_EXTENSION)
+    if path.exists(PID_PATH):
+        remove(PID_PATH)
 
 
-def Sample_Image() -> Background | None:
+def Sample_Image() -> (str, str):
 
-    fl = "saved_pid"
     if not path.exists(GENERATED_OUTPUT):
         makedirs(GENERATED_OUTPUT)
     images = listdir(GENERATED_OUTPUT)
 
-    if len(images) < 8:
+    if len(images) < 50:
         processes = {p.info["pid"]: p.info["name"]
                      for p in psutil.process_iter(attrs=["pid", "name"])
                      }
-        if not path.exists(fl):
-            saved_pid = - 1
+        if not path.exists(PID_PATH):
+            saved_pid = -1
         else:
-            with open(fl, "rt") as file:
+            with open(PID_PATH, "rt") as file:
                 saved_pid = file.read()
                 if saved_pid.isdigit():
                     saved_pid = int(saved_pid)
@@ -92,11 +94,8 @@ def Sample_Image() -> Background | None:
             proc = Process(target=Run_Models)
             proc.start()
             pid = proc.pid
-            with open(fl, "wt") as wfile:
+            with open(PID_PATH, "wt") as wfile:
                 wfile.write(str(pid))
-    elif path.exists(fl):
-        remove(fl)
-
     tries = 0
     while tries < 30:
         images = listdir(GENERATED_OUTPUT)
@@ -112,11 +111,11 @@ def Sample_Image() -> Background | None:
                     hr_image_path = Path(file.replace("lr", "hr"))
                 encoded_lr_image = Encode_Image(lr_image_path)
                 encoded_hr_image = Encode_Image(hr_image_path)
+                remove(lr_image_path)
+                remove(hr_image_path)
+                return Background(encoded_lr_image, encoded_hr_image)
             except:
                 continue
-            remove(lr_image_path)
-            remove(hr_image_path)
-            return Background(encoded_lr_image, encoded_hr_image)
         tries += 1
         time.sleep(1)
     return None

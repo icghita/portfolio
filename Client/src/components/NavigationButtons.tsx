@@ -152,7 +152,6 @@ const menu_button_style = {
 
 const expandable_menu_style = {
     style: {
-        maxHeight: 40 * 4.5,
         width: "20ch",
         background: global_theme.palette.primary.main,
     },
